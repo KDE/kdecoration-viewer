@@ -52,7 +52,7 @@ class PreviewClient : public QObject, public DecoratedClientPrivate
     Q_PROPERTY(bool modal READ isModal WRITE setModal NOTIFY modalChanged)
     Q_PROPERTY(bool movable READ isMovable WRITE setMovable NOTIFY movableChanged)
     Q_PROPERTY(int desktop READ desktop WRITE setDesktop NOTIFY desktopChanged)
-    Q_PROPERTY(bool onAllDekstops READ isOnAllDesktops NOTIFY onAllDesktopsChanged)
+    Q_PROPERTY(bool onAllDesktops READ isOnAllDesktops NOTIFY onAllDesktopsChanged)
     Q_PROPERTY(bool resizable READ isResizable WRITE setResizable NOTIFY resizableChanged)
     Q_PROPERTY(bool shadeable READ isShadeable WRITE setShadeable NOTIFY shadeableChanged)
     Q_PROPERTY(bool shaded READ isShaded WRITE setShaded NOTIFY shadedChanged)

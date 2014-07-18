@@ -185,14 +185,14 @@ GridLayout {
     }
 
     Label {
-        text: "On All Dekstops:"
+        text: "On All Desktops:"
     }
     CheckBox {
-        id: onAllDekstopsBox
-        checked: client.onAllDekstops
+        id: onAllDesktopsBox
+        checked: client.onAllDesktops
         enabled: false
         onClicked: {
-            client.onAllDekstops = checked;
+            client.onAllDesktops = checked;
         }
     }
 
