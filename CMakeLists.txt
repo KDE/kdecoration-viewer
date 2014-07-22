@@ -28,6 +28,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS
 find_package(KF5 CONFIG REQUIRED COMPONENTS
     Config
     ConfigWidgets
+    Declarative
     I18n
     Service
 )

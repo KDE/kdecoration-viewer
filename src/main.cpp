@@ -28,6 +28,7 @@
 #include <KAboutData>
 #include <KPluginTrader>
 #include <KLocalizedString>
+#include <kdeclarative/kdeclarative.h>
 
 #include <QCommandLineParser>
 #include <QDebug>
@@ -88,6 +89,9 @@ int main(int argc, char **argv)
     }
 
     QQuickView view;
+    KDeclarative::KDeclarative kdeclarative;
+    kdeclarative.setDeclarativeEngine(view.engine());
+    kdeclarative.setupBindings();
     qRegisterMetaType<KDecoration2::Decoration*>();
     qmlRegisterType<KDecoration2::Decoration>();
     qmlRegisterType<KDecoration2::Preview::PreviewItem>("org.kde.kdecoration2.preview", 1, 0, "PreviewItem");

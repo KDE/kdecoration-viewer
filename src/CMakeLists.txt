@@ -13,6 +13,7 @@ target_link_libraries(kdecorationviewer
     KDecoration2::KDecoration2Private
     Qt5::Quick
     KF5::ConfigWidgets
+    KF5::Declarative
     KF5::Service
     KF5::I18n
 )
