@@ -23,6 +23,7 @@
 #include <KDecoration2/Private/DecorationSettingsPrivate>
 #include <KDecoration2/DecorationSettings>
 #include <QObject>
+#include <QAbstractListModel>
 
 namespace KDecoration2
 {
@@ -30,11 +31,38 @@ namespace KDecoration2
 namespace Preview
 {
 
+class ButtonsModel : public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    explicit ButtonsModel(const QList< DecorationButtonType > &buttons, QObject *parent = 0);
+    virtual ~ButtonsModel();
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash< int, QByteArray > roleNames() const override;
+
+    QList< DecorationButtonType > buttons() const {
+        return m_buttons;
+    }
+
+    Q_INVOKABLE void remove(int index);
+    Q_INVOKABLE void up(int index);
+    Q_INVOKABLE void down(int index);
+
+    void add(DecorationButtonType type);
+
+private:
+    QList< DecorationButtonType > m_buttons;
+};
+
 class PreviewSettings : public QObject, public DecorationSettingsPrivate
 {
     Q_OBJECT
     Q_PROPERTY(bool onAllDesktopsAvailable READ isOnAllDesktopsAvailable WRITE setOnAllDesktopsAvailable NOTIFY onAllDesktopsAvailableChanged)
     Q_PROPERTY(bool alphaChannelSupported READ isAlphaChannelSupported WRITE setAlphaChannelSupported NOTIFY alphaChannelSupportedChanged)
+    Q_PROPERTY(QAbstractItemModel *leftButtonsModel READ leftButtonsModel CONSTANT)
+    Q_PROPERTY(QAbstractItemModel *rightButtonsModel READ rightButtonsModel CONSTANT)
+    Q_PROPERTY(QAbstractItemModel *availableButtonsModel READ availableButtonsModel CONSTANT)
 public:
     explicit PreviewSettings(DecorationSettings *parent);
     virtual ~PreviewSettings();
@@ -44,6 +72,22 @@ public:
     void setOnAllDesktopsAvailable(bool available);
     void setAlphaChannelSupported(bool supported);
 
+    QAbstractItemModel *leftButtonsModel() const {
+        return m_leftButtons;
+    }
+    QAbstractItemModel *rightButtonsModel() const {
+        return m_rightButtons;
+    }
+    QAbstractItemModel *availableButtonsModel() const {
+        return m_availableButtons;
+    }
+
+    QList< DecorationButtonType > decorationButtonsLeft() const;
+    QList< DecorationButtonType > decorationButtonsRight() const;
+
+    Q_INVOKABLE void addButtonToLeft(int row);
+    Q_INVOKABLE void addButtonToRight(int row);
+
 Q_SIGNALS:
     void onAllDesktopsAvailableChanged(bool);
     void alphaChannelSupportedChanged(bool);
@@ -51,6 +95,9 @@ Q_SIGNALS:
 private:
     bool m_alphaChannelSupported;
     bool m_onAllDesktopsAvailable;
+    ButtonsModel *m_leftButtons;
+    ButtonsModel *m_rightButtons;
+    ButtonsModel *m_availableButtons;
 };
 
 }

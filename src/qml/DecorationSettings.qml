@@ -46,6 +46,110 @@ GridLayout {
         }
     }
 
+    Label {
+        text: i18n("Left Decoration Buttons:")
+    }
+    ScrollView {
+        ListView {
+            id: leftButtons
+            model: settings.leftButtonsModel
+            delegate: Item {
+                id: delegate
+                width: parent.width
+                height: childrenRect.height
+                RowLayout {
+                    Label {
+                        Layout.fillWidth: true
+                        text: display
+                    }
+                    Button {
+                        iconName: "list-remove"
+                        text: i18n("Remove")
+                        onClicked: settings.leftButtonsModel.remove(index)
+                    }
+                    Button {
+                        visible: index != 0 && delegate.ListView.view.count > 1
+                        iconName: "go-up"
+                        text: i18n("Up")
+                        onClicked: settings.leftButtonsModel.up(index)
+                    }
+                    Button {
+                        visible: index != delegate.ListView.view.count - 1 && delegate.ListView.view.count > 1
+                        iconName: "go-down"
+                        text: i18n("Down")
+                        onClicked: settings.leftButtonsModel.down(index)
+                    }
+                }
+            }
+        }
+    }
+    Label {
+        text: i18n("Available Buttons:")
+    }
+    ScrollView {
+        ListView {
+            id: availableButtons
+            model: settings.availableButtonsModel
+            delegate: Item {
+                id: delegate
+                width: parent.width
+                height: childrenRect.height
+                RowLayout {
+                    Label {
+                        Layout.fillWidth: true
+                        text: display
+                    }
+                    Button {
+                        iconName: "go-left"
+                        text: i18n("To left")
+                        onClicked: settings.addButtonToLeft(index)
+                    }
+                    Button {
+                        iconName: "go-right"
+                        text: i18n("To right")
+                        onClicked: settings.addButtonToRight(index)
+                    }
+                }
+            }
+        }
+    }
+    Label {
+        text: i18n("Right Decoration Buttons:")
+    }
+    ScrollView {
+        ListView {
+            id: rightButtons
+            model: settings.rightButtonsModel
+            delegate: Item {
+                id: delegate
+                width: parent.width
+                height: childrenRect.height
+                RowLayout {
+                    Label {
+                        Layout.fillWidth: true
+                        text: display
+                    }
+                    Button {
+                        iconName: "list-remove"
+                        text: i18n("Remove")
+                        onClicked: settings.rightButtonsModel.remove(index)
+                    }
+                    Button {
+                        visible: index != 0 && delegate.ListView.view.count > 1
+                        iconName: "go-up"
+                        text: i18n("Up")
+                        onClicked: settings.rightButtonsModel.up(index)
+                    }
+                    Button {
+                        visible: index != delegate.ListView.view.count - 1  && delegate.ListView.view.count > 1
+                        iconName: "go-down"
+                        text: i18n("Down")
+                        onClicked: settings.rightButtonsModel.down(index)
+                    }
+                }
+            }
+        }
+    }
 
 //     Label {
 //         text: ":"

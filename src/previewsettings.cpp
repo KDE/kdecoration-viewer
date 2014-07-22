@@ -19,6 +19,7 @@
  */
 #include "previewsettings.h"
 
+#include <KLocalizedString>
 
 namespace KDecoration2
 {
@@ -26,14 +27,153 @@ namespace KDecoration2
 namespace Preview
 {
 
+ButtonsModel::ButtonsModel(const QList< DecorationButtonType > &buttons, QObject *parent)
+    : QAbstractListModel(parent)
+    , m_buttons(buttons)
+{
+}
+
+ButtonsModel::~ButtonsModel() = default;
+
+int ButtonsModel::rowCount(const QModelIndex &parent) const
+{
+    if (parent.isValid()) {
+        return 0;
+    }
+    return m_buttons.count();
+}
+
+static QString buttonToName(DecorationButtonType type)
+{
+    switch (type) {
+        case DecorationButtonType::Menu:
+            return i18n("Menu");
+        case DecorationButtonType::ApplicationMenu:
+            return i18n("Application menu");
+        case DecorationButtonType::OnAllDesktops:
+            return i18n("On all desktops");
+        case DecorationButtonType::Minimize:
+            return i18n("Minimize");
+        case DecorationButtonType::Maximize:
+            return i18n("Maximize");
+        case DecorationButtonType::Close:
+            return i18n("Close");
+        case DecorationButtonType::QuickHelp:
+            return i18n("Quick help");
+        case DecorationButtonType::Shade:
+            return i18n("Shade");
+        case DecorationButtonType::KeepBelow:
+            return i18n("Keep below");
+        case DecorationButtonType::KeepAbove:
+            return i18n("Keep above");
+        default:
+            return QString();
+    }
+}
+
+QVariant ButtonsModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid() ||
+            index.row() < 0 ||
+            index.row() >= m_buttons.count() ||
+            index.column() != 0) {
+        return QVariant();
+    }
+    switch (role) {
+    case Qt::DisplayRole:
+        return buttonToName(m_buttons.at(index.row()));
+    case Qt::UserRole:
+        return QVariant::fromValue(m_buttons.at(index.row()));
+    }
+    return QVariant();
+}
+
+QHash< int, QByteArray > ButtonsModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles.insert(Qt::DisplayRole, QByteArrayLiteral("display"));
+    return roles;
+}
+
+void ButtonsModel::remove(int row)
+{
+    if (row < 0 || row >= m_buttons.count()) {
+        return;
+    }
+    beginRemoveRows(QModelIndex(), row, row);
+    m_buttons.removeAt(row);
+    endRemoveRows();
+}
+
+void ButtonsModel::down(int index)
+{
+    if (m_buttons.count() < 2 || index == m_buttons.count() -1) {
+        return;
+    }
+    beginMoveRows(QModelIndex(), index, index, QModelIndex(), index + 2);
+    m_buttons.move(index, index + 1);
+    endMoveRows();
+}
+
+void ButtonsModel::up(int index)
+{
+    if (m_buttons.count() < 2 || index == 0) {
+        return;
+    }
+    beginMoveRows(QModelIndex(), index, index, QModelIndex(), index -1);
+    m_buttons.move(index, index - 1);
+    endMoveRows();
+}
+
+void ButtonsModel::add(DecorationButtonType type)
+{
+    beginInsertRows(QModelIndex(), m_buttons.count(), m_buttons.count());
+    m_buttons.append(type);
+    endInsertRows();
+}
+
 PreviewSettings::PreviewSettings(DecorationSettings *parent)
     : QObject()
     , DecorationSettingsPrivate(parent)
     , m_alphaChannelSupported(true)
     , m_onAllDesktopsAvailable(true)
+    , m_leftButtons(new ButtonsModel(QList<DecorationButtonType>({
+            DecorationButtonType::Menu,
+            DecorationButtonType::OnAllDesktops
+        }), this))
+    , m_rightButtons(new ButtonsModel(QList<DecorationButtonType>({
+            DecorationButtonType::QuickHelp,
+            DecorationButtonType::Minimize,
+            DecorationButtonType::Maximize,
+            DecorationButtonType::Close
+        }), this))
+    , m_availableButtons(new ButtonsModel(QList<DecorationButtonType>({
+            DecorationButtonType::Menu,
+            DecorationButtonType::ApplicationMenu,
+            DecorationButtonType::OnAllDesktops,
+            DecorationButtonType::Minimize,
+            DecorationButtonType::Maximize,
+            DecorationButtonType::Close,
+            DecorationButtonType::QuickHelp,
+            DecorationButtonType::Shade,
+            DecorationButtonType::KeepBelow,
+            DecorationButtonType::KeepAbove
+        }), this))
 {
     connect(this, &PreviewSettings::alphaChannelSupportedChanged, parent, &DecorationSettings::alphaChannelSupportedChanged);
     connect(this, &PreviewSettings::onAllDesktopsAvailableChanged, parent, &DecorationSettings::onAllDesktopsAvailableChanged);
+    auto updateLeft = [this, parent]() {
+        parent->decorationButtonsLeftChanged(decorationButtonsLeft());
+    };
+    auto updateRight = [this, parent]() {
+        parent->decorationButtonsRightChanged(decorationButtonsRight());
+    };
+    connect(m_leftButtons,  &QAbstractItemModel::rowsRemoved,  this, updateLeft);
+    connect(m_leftButtons,  &QAbstractItemModel::rowsMoved,    this, updateLeft);
+    connect(m_leftButtons,  &QAbstractItemModel::rowsInserted, this, updateLeft);
+    connect(m_rightButtons, &QAbstractItemModel::rowsRemoved,  this, updateRight);
+    connect(m_rightButtons, &QAbstractItemModel::rowsMoved,    this, updateRight);
+    connect(m_rightButtons, &QAbstractItemModel::rowsInserted, this, updateRight);
 }
 
 PreviewSettings::~PreviewSettings() = default;
@@ -64,6 +204,34 @@ void PreviewSettings::setOnAllDesktopsAvailable(bool available)
     }
     m_onAllDesktopsAvailable = available;
     emit onAllDesktopsAvailableChanged(m_onAllDesktopsAvailable);
+}
+
+QList< DecorationButtonType > PreviewSettings::decorationButtonsLeft() const
+{
+    return m_leftButtons->buttons();
+}
+
+QList< DecorationButtonType > PreviewSettings::decorationButtonsRight() const
+{
+    return m_rightButtons->buttons();
+}
+
+void PreviewSettings::addButtonToLeft(int row)
+{
+    QModelIndex index = m_availableButtons->index(row);
+    if (!index.isValid()) {
+        return;
+    }
+    m_leftButtons->add(index.data(Qt::UserRole).value<DecorationButtonType>());
+}
+
+void PreviewSettings::addButtonToRight(int row)
+{
+    QModelIndex index = m_availableButtons->index(row);
+    if (!index.isValid()) {
+        return;
+    }
+    m_rightButtons->add(index.data(Qt::UserRole).value<DecorationButtonType>());
 }
 
 }
