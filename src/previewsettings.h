@@ -55,6 +55,19 @@ private:
     QList< DecorationButtonType > m_buttons;
 };
 
+class BorderSizesModel : public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    explicit BorderSizesModel(QObject *parent = 0);
+    virtual ~BorderSizesModel();
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QHash< int, QByteArray > roleNames() const override;
+private:
+    QMap<BorderSize, QString> m_borders;
+};
+
 class PreviewSettings : public QObject, public DecorationSettingsPrivate
 {
     Q_OBJECT
@@ -63,11 +76,14 @@ class PreviewSettings : public QObject, public DecorationSettingsPrivate
     Q_PROPERTY(QAbstractItemModel *leftButtonsModel READ leftButtonsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel *rightButtonsModel READ rightButtonsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel *availableButtonsModel READ availableButtonsModel CONSTANT)
+    Q_PROPERTY(QAbstractItemModel *borderSizesModel READ borderSizesModel CONSTANT)
+    Q_PROPERTY(int borderSizesIndex READ borderSizesIndex WRITE setBorderSizesIndex NOTIFY borderSizesIndexChanged)
 public:
     explicit PreviewSettings(DecorationSettings *parent);
     virtual ~PreviewSettings();
     bool isAlphaChannelSupported() const override;
     bool isOnAllDesktopsAvailable() const override;
+    BorderSize borderSize() const override;
 
     void setOnAllDesktopsAvailable(bool available);
     void setAlphaChannelSupported(bool supported);
@@ -81,6 +97,9 @@ public:
     QAbstractItemModel *availableButtonsModel() const {
         return m_availableButtons;
     }
+    QAbstractItemModel *borderSizesModel() const {
+        return m_borderSizes;
+    }
 
     QList< DecorationButtonType > decorationButtonsLeft() const;
     QList< DecorationButtonType > decorationButtonsRight() const;
@@ -88,9 +107,15 @@ public:
     Q_INVOKABLE void addButtonToLeft(int row);
     Q_INVOKABLE void addButtonToRight(int row);
 
+    int borderSizesIndex() const {
+        return m_borderSize;
+    }
+    void setBorderSizesIndex(int index);
+
 Q_SIGNALS:
     void onAllDesktopsAvailableChanged(bool);
     void alphaChannelSupportedChanged(bool);
+    void borderSizesIndexChanged(int);
 
 private:
     bool m_alphaChannelSupported;
@@ -98,6 +123,8 @@ private:
     ButtonsModel *m_leftButtons;
     ButtonsModel *m_rightButtons;
     ButtonsModel *m_availableButtons;
+    BorderSizesModel *m_borderSizes;
+    int m_borderSize;
 };
 
 }

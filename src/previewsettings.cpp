@@ -132,6 +132,63 @@ void ButtonsModel::add(DecorationButtonType type)
     endInsertRows();
 }
 
+BorderSizesModel::BorderSizesModel(QObject *parent)
+    : QAbstractListModel(parent)
+{
+    m_borders.insert(BorderSize::None,      i18n("None"));
+    m_borders.insert(BorderSize::NoSides,   i18n("No Sides"));
+    m_borders.insert(BorderSize::Tiny,      i18n("Tiny"));
+    m_borders.insert(BorderSize::Normal,    i18n("Normal"));
+    m_borders.insert(BorderSize::Large,     i18n("Large"));
+    m_borders.insert(BorderSize::VeryLarge, i18n("Very Large"));
+    m_borders.insert(BorderSize::Huge,      i18n("Huge"));
+    m_borders.insert(BorderSize::VeryHuge,  i18n("Very Huge"));
+    m_borders.insert(BorderSize::Oversized, i18n("Oversized"));
+}
+
+BorderSizesModel::~BorderSizesModel() = default;
+
+QVariant BorderSizesModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid() || index.row() < 0 || index.row() >= m_borders.count() || index.column() != 0) {
+        return QVariant();
+    }
+    if (role != Qt::DisplayRole && role != Qt::UserRole) {
+        return QVariant();
+    }
+    QMapIterator<BorderSize, QString> it(m_borders);
+    int i = 0;
+    while (it.hasNext()) {
+        it.next();
+        if (i == index.row()) {
+            switch (role) {
+                case Qt::DisplayRole:
+                    return it.value();
+                case Qt::UserRole:
+                    return QVariant::fromValue<BorderSize>(it.key());
+            }
+            break;
+        }
+        i++;
+    }
+    return QVariant();
+}
+
+int BorderSizesModel::rowCount(const QModelIndex &parent) const
+{
+    if (parent.isValid()) {
+        return 0;
+    }
+    return m_borders.count();
+}
+
+QHash< int, QByteArray > BorderSizesModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles.insert(Qt::DisplayRole, QByteArrayLiteral("display"));
+    return roles;
+}
+
 PreviewSettings::PreviewSettings(DecorationSettings *parent)
     : QObject()
     , DecorationSettingsPrivate(parent)
@@ -159,6 +216,8 @@ PreviewSettings::PreviewSettings(DecorationSettings *parent)
             DecorationButtonType::KeepBelow,
             DecorationButtonType::KeepAbove
         }), this))
+    , m_borderSizes(new BorderSizesModel(this))
+    , m_borderSize(int(BorderSize::Normal))
 {
     connect(this, &PreviewSettings::alphaChannelSupportedChanged, parent, &DecorationSettings::alphaChannelSupportedChanged);
     connect(this, &PreviewSettings::onAllDesktopsAvailableChanged, parent, &DecorationSettings::onAllDesktopsAvailableChanged);
@@ -232,6 +291,21 @@ void PreviewSettings::addButtonToRight(int row)
         return;
     }
     m_rightButtons->add(index.data(Qt::UserRole).value<DecorationButtonType>());
+}
+
+void PreviewSettings::setBorderSizesIndex(int index)
+{
+    if (m_borderSize == index) {
+        return;
+    }
+    m_borderSize = index;
+    emit borderSizesIndexChanged(index);
+    emit decorationSettings()->borderSizeChanged(borderSize());
+}
+
+BorderSize PreviewSettings::borderSize() const
+{
+    return m_borderSizes->index(m_borderSize).data(Qt::UserRole).value<BorderSize>();
 }
 
 }

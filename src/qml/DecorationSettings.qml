@@ -47,6 +47,19 @@ GridLayout {
     }
 
     Label {
+        text: i18n("Border sizes:")
+    }
+    ComboBox {
+        id: borderSizesCombo
+        editable: false
+        model: settings.borderSizesModel
+        currentIndex: settings.borderSizesIndex
+        onCurrentIndexChanged: {
+            settings.borderSizesIndex = borderSizesCombo.currentIndex;
+        }
+    }
+
+    Label {
         text: i18n("Left Decoration Buttons:")
     }
     ScrollView {
