@@ -42,6 +42,7 @@ static const QString s_pluginName = QStringLiteral("org.kde.kdecoration2");
 
 int main(int argc, char **argv)
 {
+    KLocalizedString::setApplicationDomain("org.kde.kdecorationviewer");
     QGuiApplication app(argc, argv);
     KAboutData aboutData(QStringLiteral("kdecorationviewer"),
                          i18n("KDecoration Viewer"),

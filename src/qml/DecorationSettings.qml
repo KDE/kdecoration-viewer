@@ -25,7 +25,7 @@ GridLayout {
     columns: 2
 
     Label {
-        text: "On all desktops available:"
+        text: i18n("On all desktops available:")
     }
     CheckBox {
         id: onAllDesktopsBox
@@ -36,7 +36,7 @@ GridLayout {
     }
 
     Label {
-        text: "Alpha channel:"
+        text: i18n("Alpha channel:")
     }
     CheckBox {
         id: alphaChannelBox

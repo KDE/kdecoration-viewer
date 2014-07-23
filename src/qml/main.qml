@@ -30,21 +30,21 @@ RowLayout {
         Layout.preferredWidth: contentItem.width
         ColumnLayout {
             Label {
-                text: "Client Settings"
+                text: i18n("Client Settings")
                 font.bold: true
                 font.underline: true
             }
             ClientSettings {
             }
             Label {
-                text: "Decoration Settings"
+                text: i18n("Decoration Settings")
                 font.bold: true
                 font.underline: true
             }
             DecorationSettings {
             }
             Label {
-                text: "Canvas Settings"
+                text: i18n("Canvas Settings")
                 font.bold: true
                 font.underline: true
             }

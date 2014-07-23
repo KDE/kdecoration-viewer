@@ -28,14 +28,14 @@ GridLayout {
     property alias windowColor: windowColorDialog.color
     columns: 2
     Label {
-        text: "Canvas border:"
+        text: i18n("Canvas border:")
     }
     SpinBox {
         id: canvasBorder
         value: 20.0
     }
     Label {
-        text: "Canvas background color:"
+        text: i18n("Canvas background color:")
     }
     Button {
         ColorDialog {
@@ -48,7 +48,7 @@ GridLayout {
         }
     }
     Label {
-        text: "Window background color:"
+        text: i18n("Window background color:")
     }
     Button {
         ColorDialog {

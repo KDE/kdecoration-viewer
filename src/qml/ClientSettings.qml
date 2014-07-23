@@ -26,7 +26,7 @@ GridLayout {
     columns: 2
 
     Label {
-        text: "Caption:"
+        text: i18n("Caption:")
     }
     TextField {
         text: client.caption
@@ -36,7 +36,7 @@ GridLayout {
     }
 
     Label {
-        text: "Icon:"
+        text: i18n("Icon:")
     }
     RowLayout {
         TextField {
@@ -53,7 +53,7 @@ GridLayout {
     }
 
     Label {
-        text: "Active:"
+        text: i18n("Active:")
     }
     CheckBox {
         id: activeBox
@@ -64,7 +64,7 @@ GridLayout {
     }
 
     Label {
-        text: "Desktop"
+        text: i18n("Desktop:")
     }
     SpinBox {
         id: desktopBox
@@ -77,7 +77,7 @@ GridLayout {
     }
 
     Label {
-        text: "Closeable:"
+        text: i18n("Closeable:")
     }
     CheckBox {
         id: closeableBox
@@ -88,7 +88,7 @@ GridLayout {
     }
 
     Label {
-        text: "Keep Above:"
+        text: i18n("Keep Above:")
     }
     CheckBox {
         id: keepAboveBox
@@ -99,7 +99,7 @@ GridLayout {
     }
 
     Label {
-        text: "Keep Below:"
+        text: i18n("Keep Below:")
     }
     CheckBox {
         id: keepBelowBox
@@ -110,7 +110,7 @@ GridLayout {
     }
 
     Label {
-        text: "Maximizable:"
+        text: i18n("Maximizable:")
     }
     CheckBox {
         id: maximizableBox
@@ -121,7 +121,7 @@ GridLayout {
     }
 
     Label {
-        text: "Maximized:"
+        text: i18n("Maximized:")
     }
     CheckBox {
         id: maximizedBox
@@ -130,7 +130,7 @@ GridLayout {
     }
 
     Label {
-        text: "Maximized Vertically:"
+        text: i18n("Maximized Vertically:")
     }
     CheckBox {
         id: maximizedVerticallyBox
@@ -141,7 +141,7 @@ GridLayout {
     }
 
     Label {
-        text: "Maximized Horizontally:"
+        text: i18n("Maximized Horizontally:")
     }
     CheckBox {
         id: maximizedHorizontallyBox
@@ -152,7 +152,7 @@ GridLayout {
     }
 
     Label {
-        text: "Minimizable:"
+        text: i18n("Minimizable:")
     }
     CheckBox {
         id: minimizableBox
@@ -163,7 +163,7 @@ GridLayout {
     }
 
     Label {
-        text: "Modal:"
+        text: i18n("Modal:")
     }
     CheckBox {
         id: modalBox
@@ -174,7 +174,7 @@ GridLayout {
     }
 
     Label {
-        text: "Movable:"
+        text: i18n("Movable:")
     }
     CheckBox {
         id: movableBox
@@ -185,7 +185,7 @@ GridLayout {
     }
 
     Label {
-        text: "On All Desktops:"
+        text: i18n("On All Desktops:")
     }
     CheckBox {
         id: onAllDesktopsBox
@@ -197,7 +197,7 @@ GridLayout {
     }
 
     Label {
-        text: "Resizable:"
+        text: i18n("Resizable:")
     }
     CheckBox {
         id: resizableBox
@@ -208,7 +208,7 @@ GridLayout {
     }
 
     Label {
-        text: "Shadeable:"
+        text: i18n("Shadeable:")
     }
     CheckBox {
         id: shadeableBox
@@ -219,7 +219,7 @@ GridLayout {
     }
 
     Label {
-        text: "Shaded:"
+        text: i18n("Shaded:")
     }
     CheckBox {
         id: shadedBox
@@ -230,7 +230,7 @@ GridLayout {
     }
 
     Label {
-        text: "Provides Context Help:"
+        text: i18n("Provides Context Help:")
     }
     CheckBox {
         id: providesContextHelpBox
@@ -241,7 +241,7 @@ GridLayout {
     }
 
     Label {
-        text: "Color Scheme:"
+        text: i18n("Color Scheme:")
     }
     ComboBox {
         model: client.colorSchemeModel
