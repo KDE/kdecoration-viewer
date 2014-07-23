@@ -6,7 +6,6 @@ set(preview_SRCS
     main.cpp
 )
 
-add_definitions(-DSOURCE_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}\")
 add_executable(kdecorationviewer ${preview_SRCS})
 target_link_libraries(kdecorationviewer
     KDecoration2::KDecoration
@@ -17,3 +16,6 @@ target_link_libraries(kdecorationviewer
     KF5::Service
     KF5::I18n
 )
+
+install(DIRECTORY qml DESTINATION ${DATA_INSTALL_DIR}/org.kde.kdecorationviewer)
+install(TARGETS kdecorationviewer ${INSTALL_TARGETS_DEFAULT_ARGS} )

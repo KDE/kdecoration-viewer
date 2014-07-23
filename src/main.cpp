@@ -36,6 +36,7 @@
 #include <QQuickView>
 #include <QQmlContext>
 #include <QQmlEngine>
+#include <QStandardPaths>
 
 static const QString s_pluginName = QStringLiteral("org.kde.kdecoration2");
 
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.engine()->rootContext()->setContextProperty(QStringLiteral("client"), bridge.lastCreatedClient());
     view.engine()->rootContext()->setContextProperty(QStringLiteral("settings"), bridge.lastCreatedSettings());
-    view.setSource(QUrl::fromLocalFile(QStringLiteral(SOURCE_DIR) + QStringLiteral("/qml/main.qml")));
+    view.setSource(QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("org.kde.kdecorationviewer/qml/main.qml"))));
 
     view.show();
 
