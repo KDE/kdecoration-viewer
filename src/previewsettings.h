@@ -73,6 +73,7 @@ class PreviewSettings : public QObject, public DecorationSettingsPrivate
     Q_OBJECT
     Q_PROPERTY(bool onAllDesktopsAvailable READ isOnAllDesktopsAvailable WRITE setOnAllDesktopsAvailable NOTIFY onAllDesktopsAvailableChanged)
     Q_PROPERTY(bool alphaChannelSupported READ isAlphaChannelSupported WRITE setAlphaChannelSupported NOTIFY alphaChannelSupportedChanged)
+    Q_PROPERTY(bool closeOnDoubleClickOnMenu READ isCloseOnDoubleClickOnMenu WRITE setCloseOnDoubleClickOnMenu NOTIFY closeOnDoubleClickOnMenuChanged)
     Q_PROPERTY(QAbstractItemModel *leftButtonsModel READ leftButtonsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel *rightButtonsModel READ rightButtonsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel *availableButtonsModel READ availableButtonsModel CONSTANT)
@@ -84,10 +85,14 @@ public:
     virtual ~PreviewSettings();
     bool isAlphaChannelSupported() const override;
     bool isOnAllDesktopsAvailable() const override;
+    bool isCloseOnDoubleClickOnMenu() const override {
+        return m_closeOnDoubleClick;
+    }
     BorderSize borderSize() const override;
 
     void setOnAllDesktopsAvailable(bool available);
     void setAlphaChannelSupported(bool supported);
+    void setCloseOnDoubleClickOnMenu(bool enabled);
 
     QAbstractItemModel *leftButtonsModel() const {
         return m_leftButtons;
@@ -121,12 +126,14 @@ public:
 Q_SIGNALS:
     void onAllDesktopsAvailableChanged(bool);
     void alphaChannelSupportedChanged(bool);
+    void closeOnDoubleClickOnMenuChanged(bool);
     void borderSizesIndexChanged(int);
     void fontChanged(const QFont &);
 
 private:
     bool m_alphaChannelSupported;
     bool m_onAllDesktopsAvailable;
+    bool m_closeOnDoubleClick;
     ButtonsModel *m_leftButtons;
     ButtonsModel *m_rightButtons;
     ButtonsModel *m_availableButtons;

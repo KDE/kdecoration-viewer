@@ -48,6 +48,17 @@ GridLayout {
     }
 
     Label {
+        text: i18n("Double click on Menu to close:")
+    }
+    CheckBox {
+        id: closeDoubleClickBox
+        checked: settings.closeOnDoubleClickOnMenu
+        onClicked: {
+            settings.closeOnDoubleClickOnMenu = checked;
+        }
+    }
+
+    Label {
         text: i18n("Border sizes:")
     }
     ComboBox {

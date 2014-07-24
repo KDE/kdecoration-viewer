@@ -195,6 +195,7 @@ PreviewSettings::PreviewSettings(DecorationSettings *parent)
     , DecorationSettingsPrivate(parent)
     , m_alphaChannelSupported(true)
     , m_onAllDesktopsAvailable(true)
+    , m_closeOnDoubleClick(false)
     , m_leftButtons(new ButtonsModel(QList<DecorationButtonType>({
             DecorationButtonType::Menu,
             DecorationButtonType::OnAllDesktops
@@ -223,6 +224,7 @@ PreviewSettings::PreviewSettings(DecorationSettings *parent)
 {
     connect(this, &PreviewSettings::alphaChannelSupportedChanged, parent, &DecorationSettings::alphaChannelSupportedChanged);
     connect(this, &PreviewSettings::onAllDesktopsAvailableChanged, parent, &DecorationSettings::onAllDesktopsAvailableChanged);
+    connect(this, &PreviewSettings::closeOnDoubleClickOnMenuChanged, parent, &DecorationSettings::closeOnDoubleClickOnMenuChanged);
     connect(this, &PreviewSettings::fontChanged, parent, &DecorationSettings::fontChanged);
     auto updateLeft = [this, parent]() {
         parent->decorationButtonsLeftChanged(decorationButtonsLeft());
@@ -266,6 +268,15 @@ void PreviewSettings::setOnAllDesktopsAvailable(bool available)
     }
     m_onAllDesktopsAvailable = available;
     emit onAllDesktopsAvailableChanged(m_onAllDesktopsAvailable);
+}
+
+void PreviewSettings::setCloseOnDoubleClickOnMenu(bool enabled)
+{
+    if (m_closeOnDoubleClick == enabled) {
+        return;
+    }
+    m_closeOnDoubleClick = enabled;
+    emit closeOnDoubleClickOnMenuChanged(enabled);
 }
 
 QList< DecorationButtonType > PreviewSettings::decorationButtonsLeft() const
