@@ -78,6 +78,7 @@ class PreviewSettings : public QObject, public DecorationSettingsPrivate
     Q_PROPERTY(QAbstractItemModel *availableButtonsModel READ availableButtonsModel CONSTANT)
     Q_PROPERTY(QAbstractItemModel *borderSizesModel READ borderSizesModel CONSTANT)
     Q_PROPERTY(int borderSizesIndex READ borderSizesIndex WRITE setBorderSizesIndex NOTIFY borderSizesIndexChanged)
+    Q_PROPERTY(QFont font READ font WRITE setFont NOTIFY fontChanged)
 public:
     explicit PreviewSettings(DecorationSettings *parent);
     virtual ~PreviewSettings();
@@ -112,10 +113,16 @@ public:
     }
     void setBorderSizesIndex(int index);
 
+    QFont font() const {
+        return m_font;
+    }
+    void setFont(const QFont &font);
+
 Q_SIGNALS:
     void onAllDesktopsAvailableChanged(bool);
     void alphaChannelSupportedChanged(bool);
     void borderSizesIndexChanged(int);
+    void fontChanged(const QFont &);
 
 private:
     bool m_alphaChannelSupported;
@@ -125,6 +132,7 @@ private:
     ButtonsModel *m_availableButtons;
     BorderSizesModel *m_borderSizes;
     int m_borderSize;
+    QFont m_font;
 };
 
 }

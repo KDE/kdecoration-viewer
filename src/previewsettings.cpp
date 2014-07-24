@@ -20,6 +20,7 @@
 #include "previewsettings.h"
 
 #include <KLocalizedString>
+#include <QFontDatabase>
 
 namespace KDecoration2
 {
@@ -218,9 +219,11 @@ PreviewSettings::PreviewSettings(DecorationSettings *parent)
         }), this))
     , m_borderSizes(new BorderSizesModel(this))
     , m_borderSize(int(BorderSize::Normal))
+    , m_font(QFontDatabase::systemFont(QFontDatabase::TitleFont))
 {
     connect(this, &PreviewSettings::alphaChannelSupportedChanged, parent, &DecorationSettings::alphaChannelSupportedChanged);
     connect(this, &PreviewSettings::onAllDesktopsAvailableChanged, parent, &DecorationSettings::onAllDesktopsAvailableChanged);
+    connect(this, &PreviewSettings::fontChanged, parent, &DecorationSettings::fontChanged);
     auto updateLeft = [this, parent]() {
         parent->decorationButtonsLeftChanged(decorationButtonsLeft());
     };
@@ -306,6 +309,15 @@ void PreviewSettings::setBorderSizesIndex(int index)
 BorderSize PreviewSettings::borderSize() const
 {
     return m_borderSizes->index(m_borderSize).data(Qt::UserRole).value<BorderSize>();
+}
+
+void PreviewSettings::setFont(const QFont &font)
+{
+    if (m_font == font) {
+        return;
+    }
+    m_font = font;
+    emit fontChanged(m_font);
 }
 
 }

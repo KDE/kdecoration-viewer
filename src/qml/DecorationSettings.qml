@@ -20,6 +20,7 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
+import QtQuick.Dialogs 1.1
 
 GridLayout {
     columns: 2
@@ -161,6 +162,23 @@ GridLayout {
                     }
                 }
             }
+        }
+    }
+
+    Label {
+        text: i18n("Font:")
+    }
+    Button {
+        FontDialog {
+            id: fontDialog
+            font: settings.font
+            onAccepted: {
+                settings.font = fontDialog.font;
+            }
+        }
+        text: settings.font
+        onClicked: {
+            fontDialog.open();
         }
     }
 
