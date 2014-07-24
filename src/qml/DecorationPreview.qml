@@ -36,8 +36,14 @@ Rectangle {
             leftMargin: base.canvasBorder
         }
         Component.onCompleted: {
-            client.width = Qt.binding(function() { return preview.width - preview.decoration.borderLeft - preview.decoration.borderRight; });
-            client.height = Qt.binding(function() { return preview.height - preview.decoration.borderTop - preview.decoration.borderBottom; });
+            client.width = Qt.binding(function() {
+                var shadowOffset = preview.decoration.shadow ? preview.decoration.shadow.paddingLeft + preview.decoration.shadow.paddingRight : 0;
+                return preview.width - preview.decoration.borderLeft - preview.decoration.borderRight - shadowOffset;
+            });
+            client.height = Qt.binding(function() {
+                var shadowOffset = preview.decoration.shadow ? preview.decoration.shadow.paddingTop + preview.decoration.shadow.paddingBottom : 0;
+                return preview.height - preview.decoration.borderTop - preview.decoration.borderBottom - shadowOffset;
+            });
         }
     }
 }

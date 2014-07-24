@@ -20,6 +20,7 @@
 #include "previewitem.h"
 #include "previewbridge.h"
 #include <KDecoration2/Decoration>
+#include <KDecoration2/DecorationShadow>
 #include <KDecoration2/DecoratedClient>
 #include <QCursor>
 #include <QPainter>
@@ -110,46 +111,144 @@ void PreviewItem::paint(QPainter *painter)
     if (!m_decoration) {
         return;
     }
+    int paddingLeft   = 0;
+    int paddingTop    = 0;
+    int paddingRight  = 0;
+    int paddingBottom = 0;
+    if (const DecorationShadow *shadow = ((const Decoration*)(m_decoration))->shadow()) {
+        const QImage img = shadow->shadow();
+        const QRect topLeft     = QRect(QPoint(0, 0), shadow->topLeft());
+        const QRect top         = QRect(QPoint(topLeft.width(), 0), shadow->top());
+        const QRect topRight    = QRect(QPoint(topLeft.width() + top.width(), 0), shadow->topRight());
+        const QRect right       = QRect(QPoint(topLeft.width() + top.width(), topRight.height()), shadow->right());
+        const QRect left        = QRect(QPoint(0, topLeft.height()), shadow->left());
+        const QRect bottomLeft  = QRect(QPoint(0, topLeft.height() + left.height()), shadow->bottomLeft());
+        const QRect bottom      = QRect(QPoint(bottomLeft.width(), img.height() - shadow->bottom().height()), shadow->bottom());
+        const QRect bottomRight = QRect(QPoint(bottomLeft.width() + bottom.width(), topRight.height() + right.height()), shadow->bottomRight());
+        paddingLeft   = shadow->paddingLeft();
+        paddingTop    = shadow->paddingTop();
+        paddingRight  = shadow->paddingRight();
+        paddingBottom = shadow->paddingBottom();
+
+        painter->translate(paddingLeft, paddingTop);
+
+        // top left
+        painter->drawImage(QPoint(-paddingLeft, -paddingTop), img, topLeft);
+        // top
+        painter->drawImage(QRect(-paddingLeft + topLeft.width(), -paddingTop, width() - topLeft.width() - topRight.width(), top.height()), img, top);
+        // top right
+        painter->drawImage(QPoint(width() - topRight.width() - paddingLeft, -paddingTop), img, topRight);
+        // right
+        painter->drawImage(QRect(width() - right.width() - paddingLeft, -paddingTop + topRight.height(), right.width(), height() - topRight.height() - bottomRight.height()), img, right);
+        // bottom right
+        painter->drawImage(QPoint(width() - paddingLeft - bottomRight.width(), height() - paddingTop - bottomRight.height()), img, bottomRight);
+        // bottom
+        painter->drawImage(QRect(-paddingLeft + bottomLeft.width(), height() - bottom.height() - paddingTop, width() - bottomLeft.width() - bottomRight.width(), bottom.height()), img, bottom);
+        // bottom left
+        painter->drawImage(QPoint(-paddingLeft, height() - bottomLeft.height() - paddingTop), img, bottomLeft);
+        // left
+        painter->drawImage(QRect(-paddingLeft, -paddingTop + topLeft.height(), left.width(), height() - topLeft.height() - bottomLeft.height()), img, left);
+    }
     m_decoration->paint(painter);
     painter->fillRect(m_decoration->borderLeft(), m_decoration->borderTop(),
-                      width() - m_decoration->borderLeft() - m_decoration->borderRight(),
-                      height() - m_decoration->borderTop() - m_decoration->borderBottom(),
+                      width() - m_decoration->borderLeft() - m_decoration->borderRight() - paddingLeft - paddingRight,
+                      height() - m_decoration->borderTop() - m_decoration->borderBottom() - paddingTop - paddingBottom,
                       m_windowColor);
 }
 
 void PreviewItem::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    QCoreApplication::instance()->sendEvent(decoration(), event);
+    if (const DecorationShadow *shadow = ((const Decoration*)(m_decoration))->shadow()) {
+        QMouseEvent e(event->type(),
+                      event->localPos() - QPointF(shadow->paddingLeft(), shadow->paddingTop()),
+                      event->button(),
+                      event->buttons(),
+                      event->modifiers());
+        QCoreApplication::instance()->sendEvent(decoration(), &e);
+    } else {
+        QCoreApplication::instance()->sendEvent(decoration(), event);
+    }
 }
 
 void PreviewItem::mousePressEvent(QMouseEvent *event)
 {
-    QCoreApplication::instance()->sendEvent(decoration(), event);
+    if (const DecorationShadow *shadow = ((const Decoration*)(m_decoration))->shadow()) {
+        QMouseEvent e(event->type(),
+                      event->localPos() - QPointF(shadow->paddingLeft(), shadow->paddingTop()),
+                      event->button(),
+                      event->buttons(),
+                      event->modifiers());
+        QCoreApplication::instance()->sendEvent(decoration(), &e);
+    } else {
+        QCoreApplication::instance()->sendEvent(decoration(), event);
+    }
 }
 
 void PreviewItem::mouseReleaseEvent(QMouseEvent *event)
 {
-    QCoreApplication::instance()->sendEvent(decoration(), event);
+    if (const DecorationShadow *shadow = ((const Decoration*)(m_decoration))->shadow()) {
+        QMouseEvent e(event->type(),
+                      event->localPos() - QPointF(shadow->paddingLeft(), shadow->paddingTop()),
+                      event->button(),
+                      event->buttons(),
+                      event->modifiers());
+        QCoreApplication::instance()->sendEvent(decoration(), &e);
+    } else {
+        QCoreApplication::instance()->sendEvent(decoration(), event);
+    }
 }
 
 void PreviewItem::mouseMoveEvent(QMouseEvent *event)
 {
-    QCoreApplication::instance()->sendEvent(decoration(), event);
+    if (const DecorationShadow *shadow = ((const Decoration*)(m_decoration))->shadow()) {
+        QMouseEvent e(event->type(),
+                      event->localPos() - QPointF(shadow->paddingLeft(), shadow->paddingTop()),
+                      event->button(),
+                      event->buttons(),
+                      event->modifiers());
+        QCoreApplication::instance()->sendEvent(decoration(), &e);
+    } else {
+        QCoreApplication::instance()->sendEvent(decoration(), event);
+    }
 }
 
 void PreviewItem::hoverEnterEvent(QHoverEvent *event)
 {
-    QCoreApplication::instance()->sendEvent(decoration(), event);
+    if (const DecorationShadow *shadow = ((const Decoration*)(m_decoration))->shadow()) {
+        QHoverEvent e(event->type(),
+                      event->posF() - QPointF(shadow->paddingLeft(), shadow->paddingTop()),
+                      event->oldPosF() - QPointF(shadow->paddingLeft(), shadow->paddingTop()),
+                      event->modifiers());
+        QCoreApplication::instance()->sendEvent(decoration(), &e);
+    } else {
+        QCoreApplication::instance()->sendEvent(decoration(), event);
+    }
 }
 
 void PreviewItem::hoverLeaveEvent(QHoverEvent *event)
 {
-    QCoreApplication::instance()->sendEvent(decoration(), event);
+    if (const DecorationShadow *shadow = ((const Decoration*)(m_decoration))->shadow()) {
+        QHoverEvent e(event->type(),
+                      event->posF() - QPointF(shadow->paddingLeft(), shadow->paddingTop()),
+                      event->oldPosF() - QPointF(shadow->paddingLeft(), shadow->paddingTop()),
+                      event->modifiers());
+        QCoreApplication::instance()->sendEvent(decoration(), &e);
+    } else {
+        QCoreApplication::instance()->sendEvent(decoration(), event);
+    }
 }
 
 void PreviewItem::hoverMoveEvent(QHoverEvent *event)
 {
-    QCoreApplication::instance()->sendEvent(decoration(), event);
+    if (const DecorationShadow *shadow = ((const Decoration*)(m_decoration))->shadow()) {
+        QHoverEvent e(event->type(),
+                      event->posF() - QPointF(shadow->paddingLeft(), shadow->paddingTop()),
+                      event->oldPosF() - QPointF(shadow->paddingLeft(), shadow->paddingTop()),
+                      event->modifiers());
+        QCoreApplication::instance()->sendEvent(decoration(), &e);
+    } else {
+        QCoreApplication::instance()->sendEvent(decoration(), event);
+    }
 }
 
 }

@@ -24,6 +24,7 @@
 
 #include <KDecoration2/Decoration>
 #include <KDecoration2/DecorationSettings>
+#include <KDecoration2/DecorationShadow>
 
 #include <KAboutData>
 #include <KPluginTrader>
@@ -95,6 +96,7 @@ int main(int argc, char **argv)
     kdeclarative.setDeclarativeEngine(view.engine());
     kdeclarative.setupBindings();
     qRegisterMetaType<KDecoration2::Decoration*>();
+    qRegisterMetaType<KDecoration2::DecorationShadow*>();
     qmlRegisterType<KDecoration2::Decoration>();
     qmlRegisterType<KDecoration2::Preview::PreviewItem>("org.kde.kdecoration2.preview", 1, 0, "PreviewItem");
     view.setResizeMode(QQuickView::SizeRootObjectToView);
