@@ -59,6 +59,10 @@ class PreviewClient : public QObject, public DecoratedClientPrivate
     Q_PROPERTY(bool providesContextHelp READ providesContextHelp WRITE setProvidesContextHelp NOTIFY providesContextHelpChanged)
     Q_PROPERTY(int width READ width WRITE setWidth NOTIFY widthChanged)
     Q_PROPERTY(int height READ height WRITE setHeight NOTIFY heightChanged)
+    Q_PROPERTY(bool bordersTopEdge    READ bordersTopEdge    WRITE setBordersTopEdge    NOTIFY bordersTopEdgeChanged)
+    Q_PROPERTY(bool bordersLeftEdge   READ bordersLeftEdge   WRITE setBordersLeftEdge   NOTIFY bordersLeftEdgeChanged)
+    Q_PROPERTY(bool bordersRightEdge  READ bordersRightEdge  WRITE setBordersRightEdge  NOTIFY bordersRightEdgeChanged)
+    Q_PROPERTY(bool bordersBottomEdge READ bordersBottomEdge WRITE setBordersBottomEdge NOTIFY bordersBottomEdgeChanged)
 public:
     explicit PreviewClient(DecoratedClient *client, Decoration *decoration);
     virtual ~PreviewClient();
@@ -88,6 +92,7 @@ public:
     int width() const override;
     int height() const override;
     QPalette palette() const override;
+    Qt::Edges borderingScreenEdges() const override;
 
     void requestClose() override;
     void requestContextHelp() override;
@@ -126,6 +131,16 @@ public:
     int colorSchemeIndex() const;
     void setColorSchemeIndex(int index);
 
+    bool bordersTopEdge() const;
+    bool bordersLeftEdge() const;
+    bool bordersRightEdge() const;
+    bool bordersBottomEdge() const;
+
+    void setBordersTopEdge(bool enabled);
+    void setBordersLeftEdge(bool enabled);
+    void setBordersRightEdge(bool enabled);
+    void setBordersBottomEdge(bool enabled);
+
 Q_SIGNALS:
     void captionChanged(const QString &);
     void iconChanged(const QIcon &);
@@ -151,6 +166,10 @@ Q_SIGNALS:
     void heightChanged(int);
     void colorSchemeIndexChanged(int);
     void paletteChanged(const QPalette&);
+    void bordersTopEdgeChanged(bool);
+    void bordersLeftEdgeChanged(bool);
+    void bordersRightEdgeChanged(bool);
+    void bordersBottomEdgeChanged(bool);
 
 private:
     KColorSchemeManager *m_colorSchemeManager;
@@ -176,6 +195,10 @@ private:
     int m_desktop;
     int m_width;
     int m_height;
+    bool m_bordersTopEdge;
+    bool m_bordersLeftEdge;
+    bool m_bordersRightEdge;
+    bool m_bordersBottomEdge;
 };
 
 } // namespace Preview

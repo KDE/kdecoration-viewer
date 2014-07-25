@@ -56,6 +56,10 @@ PreviewClient::PreviewClient(DecoratedClient *c, Decoration *decoration)
     , m_desktop(1)
     , m_width(0)
     , m_height(0)
+    , m_bordersTopEdge(false)
+    , m_bordersLeftEdge(false)
+    , m_bordersRightEdge(false)
+    , m_bordersBottomEdge(false)
 {
     connect(this, &PreviewClient::captionChanged,               c, &DecoratedClient::captionChanged);
     connect(this, &PreviewClient::activeChanged,                c, &DecoratedClient::activeChanged);
@@ -119,6 +123,13 @@ PreviewClient::PreviewClient(DecoratedClient *c, Decoration *decoration)
             setMaximizedVertically(maximize);
         }
     );
+    auto emitEdgesChanged = [this, c]() {
+        c->borderingScreenEdgesChanged(borderingScreenEdges());
+    };
+    connect(this, &PreviewClient::bordersTopEdgeChanged,    this, emitEdgesChanged);
+    connect(this, &PreviewClient::bordersLeftEdgeChanged,   this, emitEdgesChanged);
+    connect(this, &PreviewClient::bordersRightEdgeChanged,  this, emitEdgesChanged);
+    connect(this, &PreviewClient::bordersBottomEdgeChanged, this, emitEdgesChanged);
 }
 
 PreviewClient::~PreviewClient() = default;
@@ -277,6 +288,80 @@ void PreviewClient::setColorSchemeIndex(int index)
     }
     m_colorSchemeIndex = index;
     emit colorSchemeIndexChanged(m_colorSchemeIndex);
+}
+
+Qt::Edges PreviewClient::borderingScreenEdges() const
+{
+    Qt::Edges edges;
+    if (m_bordersBottomEdge) {
+        edges |= Qt::BottomEdge;
+    }
+    if (m_bordersLeftEdge) {
+        edges |= Qt::LeftEdge;
+    }
+    if (m_bordersRightEdge) {
+        edges |= Qt::RightEdge;
+    }
+    if (m_bordersTopEdge) {
+        edges |= Qt::TopEdge;
+    }
+    return edges;
+}
+
+bool PreviewClient::bordersBottomEdge() const
+{
+    return m_bordersBottomEdge;
+}
+
+bool PreviewClient::bordersLeftEdge() const
+{
+    return m_bordersLeftEdge;
+}
+
+bool PreviewClient::bordersRightEdge() const
+{
+    return m_bordersRightEdge;
+}
+
+bool PreviewClient::bordersTopEdge() const
+{
+    return m_bordersTopEdge;
+}
+
+void PreviewClient::setBordersBottomEdge(bool enabled)
+{
+    if (m_bordersBottomEdge == enabled) {
+        return;
+    }
+    m_bordersBottomEdge = enabled;
+    emit bordersBottomEdgeChanged(enabled);
+}
+
+void PreviewClient::setBordersLeftEdge(bool enabled)
+{
+    if (m_bordersLeftEdge == enabled) {
+        return;
+    }
+    m_bordersLeftEdge = enabled;
+    emit bordersLeftEdgeChanged(enabled);
+}
+
+void PreviewClient::setBordersRightEdge(bool enabled)
+{
+    if (m_bordersRightEdge == enabled) {
+        return;
+    }
+    m_bordersRightEdge = enabled;
+    emit bordersRightEdgeChanged(enabled);
+}
+
+void PreviewClient::setBordersTopEdge(bool enabled)
+{
+    if (m_bordersTopEdge == enabled) {
+        return;
+    }
+    m_bordersTopEdge = enabled;
+    emit bordersTopEdgeChanged(enabled);
 }
 
 void PreviewClient::requestClose()

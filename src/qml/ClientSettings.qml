@@ -251,4 +251,44 @@ GridLayout {
             client.colorSchemeIndex = currentIndex;
         }
     }
+
+    Label {
+        text: i18n("Borders left screen edge:")
+    }
+    CheckBox {
+        checked: client.bordersLeftEdge
+        onClicked: {
+            client.bordersLeftEdge = checked;
+        }
+    }
+
+    Label {
+        text: i18n("Borders top screen edge:")
+    }
+    CheckBox {
+        checked: client.bordersTopEdge
+        onClicked: {
+            client.bordersTopEdge = checked;
+        }
+    }
+
+    Label {
+        text: i18n("Borders right screen edge:")
+    }
+    CheckBox {
+        checked: client.bordersRightEdge
+        onClicked: {
+            client.bordersRightEdge = checked;
+        }
+    }
+
+    Label {
+        text: i18n("Borders bottom screen edge:")
+    }
+    CheckBox {
+        checked: client.bordersBottomEdge
+        onClicked: {
+            client.bordersBottomEdge = checked;
+        }
+    }
 }
