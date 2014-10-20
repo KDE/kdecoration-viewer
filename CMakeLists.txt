@@ -25,7 +25,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS
     Quick
 )
 
-find_package(KF5 CONFIG REQUIRED COMPONENTS
+find_package(KF5 REQUIRED COMPONENTS
     Config
     ConfigWidgets
     Declarative
