@@ -38,9 +38,9 @@ class PreviewBridge : public DecorationBridge
 public:
     explicit PreviewBridge();
     virtual ~PreviewBridge();
-    DecoratedClientPrivate *createClient(DecoratedClient *client, Decoration *decoration) override;
+    std::unique_ptr<DecoratedClientPrivate> createClient(DecoratedClient *client, Decoration *decoration) override;
     void update(Decoration* decoration, const QRect& geometry) override;
-    DecorationSettingsPrivate *settings(DecorationSettings *parent) override;
+    std::unique_ptr<DecorationSettingsPrivate> settings(DecorationSettings *parent) override;
 
     PreviewClient *lastCreatedClient() {
         return m_lastCreatedClient;

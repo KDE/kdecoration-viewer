@@ -38,10 +38,11 @@ PreviewBridge::PreviewBridge()
 
 PreviewBridge::~PreviewBridge() = default;
 
-DecoratedClientPrivate *PreviewBridge::createClient(DecoratedClient *client, Decoration *decoration)
+std::unique_ptr<DecoratedClientPrivate> PreviewBridge::createClient(DecoratedClient *client, Decoration *decoration)
 {
-    m_lastCreatedClient = new PreviewClient(client, decoration);
-    return m_lastCreatedClient;
+    auto ptr = std::unique_ptr<PreviewClient>(new PreviewClient(client, decoration));
+    m_lastCreatedClient = ptr.get();
+    return std::move(ptr);
 }
 
 void PreviewBridge::update(Decoration *decoration, const QRect &geometry)
@@ -55,10 +56,11 @@ void PreviewBridge::update(Decoration *decoration, const QRect &geometry)
     }
 }
 
-DecorationSettingsPrivate *PreviewBridge::settings(DecorationSettings *parent)
+std::unique_ptr<DecorationSettingsPrivate> PreviewBridge::settings(DecorationSettings *parent)
 {
-    m_lastCreatedSettings = new PreviewSettings(parent);
-    return m_lastCreatedSettings;
+    auto ptr = std::unique_ptr<PreviewSettings>(new PreviewSettings(parent));
+    m_lastCreatedSettings = ptr.get();
+    return std::move(ptr);
 }
 
 void PreviewBridge::registerPreviewItem(PreviewItem *item)
