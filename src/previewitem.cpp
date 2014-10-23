@@ -63,6 +63,7 @@ void PreviewItem::setDecoration(Decoration *deco)
         disconnect(m_decoration, &Decoration::bordersChanged, this, updateSlot);
     }
     m_decoration = deco;
+    m_decoration->setProperty("visualParent", QVariant::fromValue(this));
     connect(m_decoration, &Decoration::bordersChanged, this, updateSlot);
     connect(m_decoration, &Decoration::windowFrameSectionChanged, this,
         [this](Qt::WindowFrameSection section) {
