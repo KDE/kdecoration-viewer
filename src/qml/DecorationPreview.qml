@@ -44,6 +44,7 @@ Rectangle {
                 var shadowOffset = preview.decoration.shadow ? preview.decoration.shadow.paddingTop + preview.decoration.shadow.paddingBottom : 0;
                 return preview.height - preview.decoration.borderTop - preview.decoration.borderBottom - shadowOffset;
             });
+            preview.decoration.init();
         }
     }
 }
