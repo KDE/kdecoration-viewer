@@ -66,15 +66,15 @@ PreviewClient::PreviewClient(DecoratedClient *c, Decoration *decoration)
     connect(this, &PreviewClient::closeableChanged,             c, &DecoratedClient::closeableChanged);
     connect(this, &PreviewClient::keepAboveChanged,             c, &DecoratedClient::keepAboveChanged);
     connect(this, &PreviewClient::keepBelowChanged,             c, &DecoratedClient::keepBelowChanged);
-    connect(this, &PreviewClient::maximizableChanged,           c, &DecoratedClient::maximizableChanged);
+    connect(this, &PreviewClient::maximizableChanged,           c, &DecoratedClient::maximizeableChanged);
     connect(this, &PreviewClient::maximizedChanged,             c, &DecoratedClient::maximizedChanged);
     connect(this, &PreviewClient::maximizedVerticallyChanged,   c, &DecoratedClient::maximizedVerticallyChanged);
     connect(this, &PreviewClient::maximizedHorizontallyChanged, c, &DecoratedClient::maximizedHorizontallyChanged);
-    connect(this, &PreviewClient::minimizableChanged,           c, &DecoratedClient::minimizableChanged);
+    connect(this, &PreviewClient::minimizableChanged,           c, &DecoratedClient::minimizeableChanged);
 //         connect(this, &PreviewClient::modalChanged, c, &DecoratedClient::modalChanged);
-    connect(this, &PreviewClient::movableChanged,               c, &DecoratedClient::movableChanged);
+    connect(this, &PreviewClient::movableChanged,               c, &DecoratedClient::moveableChanged);
     connect(this, &PreviewClient::onAllDesktopsChanged,         c, &DecoratedClient::onAllDesktopsChanged);
-    connect(this, &PreviewClient::resizableChanged,             c, &DecoratedClient::resizableChanged);
+    connect(this, &PreviewClient::resizableChanged,             c, &DecoratedClient::resizeableChanged);
     connect(this, &PreviewClient::shadeableChanged,             c, &DecoratedClient::shadeableChanged);
     connect(this, &PreviewClient::shadedChanged,                c, &DecoratedClient::shadedChanged);
     connect(this, &PreviewClient::providesContextHelpChanged,   c, &DecoratedClient::providesContextHelpChanged);
@@ -115,7 +115,7 @@ PreviewClient::PreviewClient(DecoratedClient *c, Decoration *decoration)
     );
     connect(decoration, &Decoration::titleBarDoubleClicked, this,
         [this]() {
-            if (!isMaximizable()) {
+            if (!isMaximizeable()) {
                 return;
             }
             const bool maximize = !isMaximized();
@@ -201,7 +201,7 @@ bool PreviewClient::isKeepBelow() const
     return m_keepBelow;
 }
 
-bool PreviewClient::isMaximizable() const
+bool PreviewClient::isMaximizeable() const
 {
     return m_maximizable;
 }
@@ -221,7 +221,7 @@ bool PreviewClient::isMaximizedVertically() const
     return m_maximizedVertically;
 }
 
-bool PreviewClient::isMinimizable() const
+bool PreviewClient::isMinimizeable() const
 {
     return m_minimizable;
 }
@@ -231,7 +231,7 @@ bool PreviewClient::isModal() const
     return m_modal;
 }
 
-bool PreviewClient::isMovable() const
+bool PreviewClient::isMoveable() const
 {
     return m_movable;
 }
@@ -241,7 +241,7 @@ bool PreviewClient::isOnAllDesktops() const
     return desktop() == -1;
 }
 
-bool PreviewClient::isResizable() const
+bool PreviewClient::isResizeable() const
 {
     return m_resizable;
 }

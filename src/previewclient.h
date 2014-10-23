@@ -44,16 +44,16 @@ class PreviewClient : public QObject, public DecoratedClientPrivate
     Q_PROPERTY(bool closeable READ isCloseable WRITE setCloseable NOTIFY closeableChanged)
     Q_PROPERTY(bool keepAbove READ isKeepAbove WRITE setKeepAbove NOTIFY keepAboveChanged)
     Q_PROPERTY(bool keepBelow READ isKeepBelow WRITE setKeepBelow NOTIFY keepBelowChanged)
-    Q_PROPERTY(bool maximizable READ isMaximizable WRITE setMaximizable NOTIFY maximizableChanged)
+    Q_PROPERTY(bool maximizable READ isMaximizeable WRITE setMaximizable NOTIFY maximizableChanged)
     Q_PROPERTY(bool maximized READ isMaximized NOTIFY maximizedChanged)
     Q_PROPERTY(bool maximizedVertically READ isMaximizedVertically WRITE setMaximizedVertically NOTIFY maximizedVerticallyChanged)
     Q_PROPERTY(bool maximizedHorizontally READ isMaximizedHorizontally WRITE setMaximizedHorizontally NOTIFY maximizedHorizontallyChanged)
-    Q_PROPERTY(bool minimizable READ isMinimizable WRITE setMinimizable NOTIFY minimizableChanged)
+    Q_PROPERTY(bool minimizable READ isMinimizeable WRITE setMinimizable NOTIFY minimizableChanged)
     Q_PROPERTY(bool modal READ isModal WRITE setModal NOTIFY modalChanged)
-    Q_PROPERTY(bool movable READ isMovable WRITE setMovable NOTIFY movableChanged)
+    Q_PROPERTY(bool movable READ isMoveable WRITE setMovable NOTIFY movableChanged)
     Q_PROPERTY(int desktop READ desktop WRITE setDesktop NOTIFY desktopChanged)
     Q_PROPERTY(bool onAllDesktops READ isOnAllDesktops NOTIFY onAllDesktopsChanged)
-    Q_PROPERTY(bool resizable READ isResizable WRITE setResizable NOTIFY resizableChanged)
+    Q_PROPERTY(bool resizable READ isResizeable WRITE setResizable NOTIFY resizableChanged)
     Q_PROPERTY(bool shadeable READ isShadeable WRITE setShadeable NOTIFY shadeableChanged)
     Q_PROPERTY(bool shaded READ isShaded WRITE setShaded NOTIFY shadedChanged)
     Q_PROPERTY(bool providesContextHelp READ providesContextHelp WRITE setProvidesContextHelp NOTIFY providesContextHelpChanged)
@@ -76,15 +76,15 @@ public:
     bool isCloseable() const override;
     bool isKeepAbove() const override;
     bool isKeepBelow() const override;
-    bool isMaximizable() const override;
+    bool isMaximizeable() const override;
     bool isMaximized() const override;
     bool isMaximizedVertically() const override;
     bool isMaximizedHorizontally() const override;
-    bool isMinimizable() const override;
+    bool isMinimizeable() const override;
     bool isModal() const override;
-    bool isMovable() const override;
+    bool isMoveable() const override;
     bool isOnAllDesktops() const override;
-    bool isResizable() const override;
+    bool isResizeable() const override;
     bool isShadeable() const override;
     bool isShaded() const override;
     bool providesContextHelp() const override;
