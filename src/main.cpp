@@ -58,6 +58,7 @@ int main(int argc, char **argv)
     parser.addOption(listOption);
     parser.addHelpOption();
     parser.addPositionalArgument(QStringLiteral("plugin"), i18n("The plugin to load."));
+    parser.addPositionalArgument(QStringLiteral("theme"), i18n("The theme for the plugin to load."));
     aboutData.setupCommandLine(&parser);
 
     parser.process(app);
@@ -71,8 +72,8 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    if (parser.positionalArguments().count() != 1) {
-        qCritical() << i18n("Expects exactly one plugin name");
+    if (parser.positionalArguments().count() == 0 || parser.positionalArguments().count() > 2) {
+        qCritical() << i18n("Plugin must be provided and one optional theme can be provided");
         return 1;
     }
 
@@ -80,16 +81,22 @@ int main(int argc, char **argv)
     KDecoration2::DecorationSettings::self(&app);
 
     QString error;
-    KPluginTrader::createInstanceFromQuery<KDecoration2::Decoration>(QStringLiteral("org.kde.kdecoration2"),
-                                                                     QStringLiteral("org.kde.kdecoration2"),
-                                                                     QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(parser.positionalArguments().first()),
-                                                                     &app,
-                                                                     QVariantList(),
-                                                                     &error);
-    if (!error.isNull()) {
-        qCritical() << i18n("Plugin failed to load: %1", error);
+    QVariantList arguments;
+    if (parser.positionalArguments().count() == 2) {
+        arguments << QVariantMap({ {QStringLiteral("theme"), parser.positionalArguments().at(1) } });
+    }
+    const auto offers = KPluginTrader::self()->query(QStringLiteral("org.kde.kdecoration2"),
+                                                     QStringLiteral("org.kde.kdecoration2"),
+                                                     QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(parser.positionalArguments().first()));
+    if (offers.isEmpty()) {
         return 1;
     }
+    KPluginLoader loader(offers.first().libraryPath());
+    auto factory = loader.factory();
+    if (!factory) {
+        return 1;
+    }
+    factory->create<KDecoration2::Decoration>(&app, arguments);
 
     QQuickView view;
     KDeclarative::KDeclarative kdeclarative;
