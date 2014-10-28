@@ -33,6 +33,7 @@ class PreviewItem : public QQuickPaintedItem
     Q_OBJECT
     Q_PROPERTY(KDecoration2::Decoration *decoration READ decoration WRITE setDecoration NOTIFY decorationChanged)
     Q_PROPERTY(QColor windowColor READ windowColor WRITE setWindowColor NOTIFY windowColorChanged)
+    Q_PROPERTY(bool drawBackground READ isDrawingBackground WRITE setDrawingBackground NOTIFY drawingBackgroundChanged)
 public:
     PreviewItem(QQuickItem *parent = nullptr);
     virtual ~PreviewItem();
@@ -44,9 +45,13 @@ public:
     QColor windowColor() const;
     void setWindowColor(const QColor &color);
 
+    bool isDrawingBackground() const;
+    void setDrawingBackground(bool set);
+
 Q_SIGNALS:
     void decorationChanged(KDecoration2::Decoration *deco);
     void windowColorChanged(const QColor &color);
+    void drawingBackgroundChanged(bool);
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) override;
@@ -60,6 +65,7 @@ protected:
 private:
     Decoration *m_decoration;
     QColor m_windowColor;
+    bool m_drawBackground = true;
 };
 
 } // Preview

@@ -151,10 +151,12 @@ void PreviewItem::paint(QPainter *painter)
         painter->drawImage(QRect(-paddingLeft, -paddingTop + topLeft.height(), left.width(), height() - topLeft.height() - bottomLeft.height()), img, left);
     }
     m_decoration->paint(painter);
-    painter->fillRect(m_decoration->borderLeft(), m_decoration->borderTop(),
-                      width() - m_decoration->borderLeft() - m_decoration->borderRight() - paddingLeft - paddingRight,
-                      height() - m_decoration->borderTop() - m_decoration->borderBottom() - paddingTop - paddingBottom,
-                      m_windowColor);
+    if (m_drawBackground) {
+        painter->fillRect(m_decoration->borderLeft(), m_decoration->borderTop(),
+                        width() - m_decoration->borderLeft() - m_decoration->borderRight() - paddingLeft - paddingRight,
+                        height() - m_decoration->borderTop() - m_decoration->borderBottom() - paddingTop - paddingBottom,
+                        m_windowColor);
+    }
 }
 
 void PreviewItem::mouseDoubleClickEvent(QMouseEvent *event)
@@ -250,6 +252,20 @@ void PreviewItem::hoverMoveEvent(QHoverEvent *event)
     } else {
         QCoreApplication::instance()->sendEvent(decoration(), event);
     }
+}
+
+bool PreviewItem::isDrawingBackground() const
+{
+    return m_drawBackground;
+}
+
+void PreviewItem::setDrawingBackground(bool set)
+{
+    if (m_drawBackground == set) {
+        return;
+    }
+    m_drawBackground = set;
+    emit drawingBackgroundChanged(set);
 }
 
 }
