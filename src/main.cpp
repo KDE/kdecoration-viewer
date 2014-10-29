@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     }
 
     KDecoration2::Preview::PreviewBridge bridge;
-    KDecoration2::DecorationSettings::self(&app);
+    auto decoSettings = QSharedPointer<KDecoration2::DecorationSettings>::create();
 
     QString error;
     QVariantList arguments;
@@ -96,7 +96,12 @@ int main(int argc, char **argv)
     if (!factory) {
         return 1;
     }
-    factory->create<KDecoration2::Decoration>(&app, arguments);
+    auto decoration = factory->create<KDecoration2::Decoration>(&app, arguments);
+    if (!decoration) {
+        qCritical() << i18n("Failed to create the Decoration");
+        return 1;
+    }
+    decoration->setSettings(decoSettings);
 
     QQuickView view;
     KDeclarative::KDeclarative kdeclarative;
