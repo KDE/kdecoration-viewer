@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     }
 
     KDecoration2::Preview::PreviewBridge bridge;
-    auto decoSettings = QSharedPointer<KDecoration2::DecorationSettings>::create();
+    auto decoSettings = QSharedPointer<KDecoration2::DecorationSettings>::create(&bridge);
 
     QString error;
     QVariantList arguments;
