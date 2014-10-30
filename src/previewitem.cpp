@@ -40,12 +40,12 @@ PreviewItem::PreviewItem(QQuickItem *parent)
     setAcceptHoverEvents(true);
     setFiltersChildMouseEvents(true);
     setAcceptedMouseButtons(Qt::MouseButtons(~Qt::NoButton));
-    static_cast<PreviewBridge*>(DecorationBridge::self())->registerPreviewItem(this);
+    PreviewBridge::instance().registerPreviewItem(this);
 }
 
 PreviewItem::~PreviewItem()
 {
-    static_cast<PreviewBridge*>(DecorationBridge::self())->unregisterPreviewItem(this);
+    PreviewBridge::instance().unregisterPreviewItem(this);
 }
 
 Decoration *PreviewItem::decoration() const

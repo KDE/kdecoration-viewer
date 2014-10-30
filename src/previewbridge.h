@@ -35,8 +35,8 @@ class PreviewSettings;
 
 class PreviewBridge : public DecorationBridge
 {
+    Q_OBJECT
 public:
-    explicit PreviewBridge();
     virtual ~PreviewBridge();
     std::unique_ptr<DecoratedClientPrivate> createClient(DecoratedClient *client, Decoration *decoration) override;
     void update(Decoration* decoration, const QRect& geometry) override;
@@ -52,7 +52,10 @@ public:
     void registerPreviewItem(PreviewItem *item);
     void unregisterPreviewItem(PreviewItem *item);
 
+    static PreviewBridge &instance();
+
 private:
+    explicit PreviewBridge(QObject *parent = nullptr);
     PreviewClient *m_lastCreatedClient;
     PreviewSettings *m_lastCreatedSettings;
     QList<PreviewItem*> m_previewItems;

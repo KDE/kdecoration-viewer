@@ -77,13 +77,13 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    KDecoration2::Preview::PreviewBridge bridge;
+    KDecoration2::Preview::PreviewBridge &bridge = KDecoration2::Preview::PreviewBridge::instance();
     auto decoSettings = QSharedPointer<KDecoration2::DecorationSettings>::create(&bridge);
 
     QString error;
-    QVariantList arguments;
+    QVariantMap args({ {QStringLiteral("bridge"), QVariant::fromValue(&bridge)} });
     if (parser.positionalArguments().count() == 2) {
-        arguments << QVariantMap({ {QStringLiteral("theme"), parser.positionalArguments().at(1) } });
+        args.insert(QStringLiteral("theme"), parser.positionalArguments().at(1));
     }
     const auto offers = KPluginTrader::self()->query(QStringLiteral("org.kde.kdecoration2"),
                                                      QStringLiteral("org.kde.kdecoration2"),
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
     if (!factory) {
         return 1;
     }
-    auto decoration = factory->create<KDecoration2::Decoration>(&app, arguments);
+    auto decoration = factory->create<KDecoration2::Decoration>(&app, QVariantList({args}));
     if (!decoration) {
         qCritical() << i18n("Failed to create the Decoration");
         return 1;

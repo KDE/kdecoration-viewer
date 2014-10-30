@@ -29,14 +29,20 @@ namespace KDecoration2
 namespace Preview
 {
 
-PreviewBridge::PreviewBridge()
-    : DecorationBridge()
+PreviewBridge::PreviewBridge(QObject *parent)
+    : DecorationBridge(parent)
     , m_lastCreatedClient(nullptr)
     , m_lastCreatedSettings(nullptr)
 {
 }
 
 PreviewBridge::~PreviewBridge() = default;
+
+PreviewBridge &PreviewBridge::instance()
+{
+    static PreviewBridge s_self;
+    return s_self;
+}
 
 std::unique_ptr<DecoratedClientPrivate> PreviewBridge::createClient(DecoratedClient *client, Decoration *decoration)
 {
