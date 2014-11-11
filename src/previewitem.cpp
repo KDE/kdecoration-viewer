@@ -150,7 +150,7 @@ void PreviewItem::paint(QPainter *painter)
         // left
         painter->drawImage(QRect(-paddingLeft, -paddingTop + topLeft.height(), left.width(), height() - topLeft.height() - bottomLeft.height()), img, left);
     }
-    m_decoration->paint(painter);
+    m_decoration->paint(painter, QRegion(0, 0, width(), height()));
     if (m_drawBackground) {
         painter->fillRect(m_decoration->borderLeft(), m_decoration->borderTop(),
                         width() - m_decoration->borderLeft() - m_decoration->borderRight() - paddingLeft - paddingRight,
