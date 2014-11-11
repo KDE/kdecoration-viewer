@@ -152,9 +152,10 @@ void PreviewItem::paint(QPainter *painter)
     }
     m_decoration->paint(painter, QRegion(0, 0, width(), height()));
     if (m_drawBackground) {
-        painter->fillRect(m_decoration->borderLeft(), m_decoration->borderTop(),
-                        width() - m_decoration->borderLeft() - m_decoration->borderRight() - paddingLeft - paddingRight,
-                        height() - m_decoration->borderTop() - m_decoration->borderBottom() - paddingTop - paddingBottom,
+        const QMargins &b = m_decoration->borders();
+        painter->fillRect(b.left(), b.top(),
+                        width() - b.left() - b.right() - paddingLeft - paddingRight,
+                        height() - b.top() - b.bottom() - paddingTop - paddingBottom,
                         m_windowColor);
     }
 }
