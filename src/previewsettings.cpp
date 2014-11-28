@@ -59,8 +59,8 @@ static QString buttonToName(DecorationButtonType type)
             return i18n("Maximize");
         case DecorationButtonType::Close:
             return i18n("Close");
-        case DecorationButtonType::QuickHelp:
-            return i18n("Quick help");
+        case DecorationButtonType::ContextHelp:
+            return i18n("Context help");
         case DecorationButtonType::Shade:
             return i18n("Shade");
         case DecorationButtonType::KeepBelow:
@@ -201,7 +201,7 @@ PreviewSettings::PreviewSettings(DecorationSettings *parent)
             DecorationButtonType::OnAllDesktops
         }), this))
     , m_rightButtons(new ButtonsModel(QList<DecorationButtonType>({
-            DecorationButtonType::QuickHelp,
+            DecorationButtonType::ContextHelp,
             DecorationButtonType::Minimize,
             DecorationButtonType::Maximize,
             DecorationButtonType::Close
@@ -213,7 +213,7 @@ PreviewSettings::PreviewSettings(DecorationSettings *parent)
             DecorationButtonType::Minimize,
             DecorationButtonType::Maximize,
             DecorationButtonType::Close,
-            DecorationButtonType::QuickHelp,
+            DecorationButtonType::ContextHelp,
             DecorationButtonType::Shade,
             DecorationButtonType::KeepBelow,
             DecorationButtonType::KeepAbove
