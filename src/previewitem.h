@@ -25,6 +25,7 @@
 namespace KDecoration2
 {
 class Decoration;
+class DecorationShadow;
 namespace Preview
 {
 
@@ -32,6 +33,7 @@ class PreviewItem : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(KDecoration2::Decoration *decoration READ decoration WRITE setDecoration NOTIFY decorationChanged)
+    Q_PROPERTY(KDecoration2::DecorationShadow *shadow READ shadow NOTIFY shadowChanged)
     Q_PROPERTY(QColor windowColor READ windowColor WRITE setWindowColor NOTIFY windowColorChanged)
     Q_PROPERTY(bool drawBackground READ isDrawingBackground WRITE setDrawingBackground NOTIFY drawingBackgroundChanged)
 public:
@@ -41,6 +43,7 @@ public:
 
     KDecoration2::Decoration *decoration() const;
     void setDecoration(KDecoration2::Decoration *deco);
+    KDecoration2::DecorationShadow *shadow() const;
 
     QColor windowColor() const;
     void setWindowColor(const QColor &color);
@@ -52,6 +55,7 @@ Q_SIGNALS:
     void decorationChanged(KDecoration2::Decoration *deco);
     void windowColorChanged(const QColor &color);
     void drawingBackgroundChanged(bool);
+    void shadowChanged();
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) override;

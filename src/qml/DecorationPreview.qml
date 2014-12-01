@@ -37,11 +37,11 @@ Rectangle {
         }
         Component.onCompleted: {
             client.width = Qt.binding(function() {
-                var shadowOffset = preview.decoration.shadow ? preview.decoration.shadow.paddingLeft + preview.decoration.shadow.paddingRight : 0;
+                var shadowOffset = preview.shadow ? preview.shadow.paddingLeft + preview.shadow.paddingRight : 0;
                 return preview.width - preview.decoration.borderLeft - preview.decoration.borderRight - shadowOffset;
             });
             client.height = Qt.binding(function() {
-                var shadowOffset = preview.decoration.shadow ? preview.decoration.shadow.paddingTop + preview.decoration.shadow.paddingBottom : 0;
+                var shadowOffset = preview.shadow ? preview.shadow.paddingTop + preview.shadow.paddingBottom : 0;
                 return preview.height - preview.decoration.borderTop - preview.decoration.borderBottom - shadowOffset;
             });
             preview.decoration.init();
