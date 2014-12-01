@@ -28,7 +28,7 @@ namespace KDecoration2
 namespace Preview
 {
 
-ButtonsModel::ButtonsModel(const QList< DecorationButtonType > &buttons, QObject *parent)
+ButtonsModel::ButtonsModel(const QVector< DecorationButtonType > &buttons, QObject *parent)
     : QAbstractListModel(parent)
     , m_buttons(buttons)
 {
@@ -112,7 +112,7 @@ void ButtonsModel::down(int index)
         return;
     }
     beginMoveRows(QModelIndex(), index, index, QModelIndex(), index + 2);
-    m_buttons.move(index, index + 1);
+    m_buttons.insert(index +1, m_buttons.takeAt(index));
     endMoveRows();
 }
 
@@ -122,7 +122,7 @@ void ButtonsModel::up(int index)
         return;
     }
     beginMoveRows(QModelIndex(), index, index, QModelIndex(), index -1);
-    m_buttons.move(index, index - 1);
+    m_buttons.insert(index -1, m_buttons.takeAt(index));
     endMoveRows();
 }
 
@@ -196,17 +196,17 @@ PreviewSettings::PreviewSettings(DecorationSettings *parent)
     , m_alphaChannelSupported(true)
     , m_onAllDesktopsAvailable(true)
     , m_closeOnDoubleClick(false)
-    , m_leftButtons(new ButtonsModel(QList<DecorationButtonType>({
+    , m_leftButtons(new ButtonsModel(QVector<DecorationButtonType>({
             DecorationButtonType::Menu,
             DecorationButtonType::OnAllDesktops
         }), this))
-    , m_rightButtons(new ButtonsModel(QList<DecorationButtonType>({
+    , m_rightButtons(new ButtonsModel(QVector<DecorationButtonType>({
             DecorationButtonType::ContextHelp,
             DecorationButtonType::Minimize,
             DecorationButtonType::Maximize,
             DecorationButtonType::Close
         }), this))
-    , m_availableButtons(new ButtonsModel(QList<DecorationButtonType>({
+    , m_availableButtons(new ButtonsModel(QVector<DecorationButtonType>({
             DecorationButtonType::Menu,
             DecorationButtonType::ApplicationMenu,
             DecorationButtonType::OnAllDesktops,
@@ -279,12 +279,12 @@ void PreviewSettings::setCloseOnDoubleClickOnMenu(bool enabled)
     emit closeOnDoubleClickOnMenuChanged(enabled);
 }
 
-QList< DecorationButtonType > PreviewSettings::decorationButtonsLeft() const
+QVector< DecorationButtonType > PreviewSettings::decorationButtonsLeft() const
 {
     return m_leftButtons->buttons();
 }
 
-QList< DecorationButtonType > PreviewSettings::decorationButtonsRight() const
+QVector< DecorationButtonType > PreviewSettings::decorationButtonsRight() const
 {
     return m_rightButtons->buttons();
 }
