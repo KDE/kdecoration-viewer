@@ -40,7 +40,7 @@ GridLayout {
     Button {
         ColorDialog {
             id: backgroundColorDialog
-            color: "black"
+            color: "gray"
         }
         text: backgroundColorDialog.color
         onClicked: {
