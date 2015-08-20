@@ -27,7 +27,9 @@
 #include <KDecoration2/DecorationShadow>
 
 #include <KAboutData>
-#include <KPluginTrader>
+#include <KPluginLoader>
+#include <KPluginMetaData>
+#include <KPluginFactory>
 #include <KLocalizedString>
 #include <kdeclarative/kdeclarative.h>
 
@@ -65,9 +67,9 @@ int main(int argc, char **argv)
     aboutData.processCommandLine(&parser);
 
     if (parser.isSet(listOption)) {
-        const auto offers = KPluginTrader::self()->query(s_pluginName, s_pluginName);
+        const auto offers = KPluginLoader::findPlugins(s_pluginName);
         for (const auto &offer : offers) {
-            qDebug() << offer.pluginName();
+            qDebug() << offer.pluginId();
         }
         return 0;
     }
@@ -85,13 +87,12 @@ int main(int argc, char **argv)
     if (parser.positionalArguments().count() == 2) {
         args.insert(QStringLiteral("theme"), parser.positionalArguments().at(1));
     }
-    const auto offers = KPluginTrader::self()->query(QStringLiteral("org.kde.kdecoration2"),
-                                                     QStringLiteral("org.kde.kdecoration2"),
-                                                     QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(parser.positionalArguments().first()));
+    const auto offers = KPluginLoader::findPluginsById(s_pluginName, parser.positionalArguments().first());
     if (offers.isEmpty()) {
+        qWarning() << "Could not locate decoration plugin";
         return 1;
     }
-    KPluginLoader loader(offers.first().libraryPath());
+    KPluginLoader loader(offers.first().fileName());
     auto factory = loader.factory();
     if (!factory) {
         return 1;

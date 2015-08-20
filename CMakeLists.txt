@@ -30,7 +30,6 @@ find_package(KF5 REQUIRED COMPONENTS
     ConfigWidgets
     Declarative
     I18n
-    Service
 )
 
 find_package(KDecoration2 REQUIRED)
