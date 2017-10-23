@@ -35,7 +35,7 @@
 
 #include <QCommandLineParser>
 #include <QDebug>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQuickView>
 #include <QQmlContext>
 #include <QQmlEngine>
@@ -46,7 +46,7 @@ static const QString s_pluginName = QStringLiteral("org.kde.kdecoration2");
 int main(int argc, char **argv)
 {
     KLocalizedString::setApplicationDomain("org.kde.kdecorationviewer");
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     KAboutData aboutData(QStringLiteral("kdecorationviewer"),
                          i18n("KDecoration Viewer"),
                          QStringLiteral("1.0.0"), // TODO: proper version number
