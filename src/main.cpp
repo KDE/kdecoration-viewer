@@ -68,8 +68,9 @@ int main(int argc, char **argv)
 
     if (parser.isSet(listOption)) {
         const auto offers = KPluginLoader::findPlugins(s_pluginName);
+        QTextStream out(stdout);
         for (const auto &offer : offers) {
-            qDebug() << offer.pluginId();
+            out << offer.pluginId() << endl;
         }
         return 0;
     }
