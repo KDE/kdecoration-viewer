@@ -21,6 +21,8 @@
 #define KDECOARTIONS_PREVIEW_CLIENT_H
 
 #include <KDecoration2/Private/DecoratedClientPrivate>
+#include <kdecoration2_version.h>
+
 #include <QObject>
 #include <QPalette>
 
@@ -94,6 +96,10 @@ public:
     QPalette palette() const override;
     Qt::Edges adjacentScreenEdges() const override;
 
+#if KDECORATION2_VERSION > QT_VERSION_CHECK(5,12,90)
+    void requestShowToolTip(const QString &text) override;
+    void requestHideToolTip() override;
+#endif
     void requestClose() override;
     void requestContextHelp() override;
     void requestToggleMaximization(Qt::MouseButtons buttons) override;
